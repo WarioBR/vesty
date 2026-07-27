@@ -1,0 +1,43 @@
+{
+  "name": "InvestidorBR — Assessor Virtual Premium",
+  "short_name": "InvestidorBR",
+  "description": "A plataforma mais completa de investimentos do Brasil. Dados reais, IA, automação e alertas.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060B14",
+  "theme_color": "#060B14",
+  "lang": "pt-BR",
+  "categories": ["finance", "business"],
+  "icons": [
+    { "src": "icons/icon-72.png",   "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-96.png",   "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-128.png",  "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-144.png",  "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-152.png",  "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-192.png",  "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-384.png",  "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png",  "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "screenshots": [
+    { "src": "icons/screenshot-wide.png",   "sizes": "1280x800",  "type": "image/png", "form_factor": "wide" },
+    { "src": "icons/screenshot-narrow.png", "sizes": "390x844",   "type": "image/png", "form_factor": "narrow" }
+  ],
+  "shortcuts": [
+    { "name": "Simulador",    "url": "/index.html#simulador",  "description": "Simular investimentos" },
+    { "name": "Mercado",      "url": "/index.html#mercado",    "description": "Mercado ao vivo" },
+    { "name": "Automação IA", "url": "/index.html#automacao",  "description": "IA Gemini" }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=br.investidorbr.app",
+      "id": "br.investidorbr.app"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/br/app/investidorbr/id0000000000"
+    }
+  ]
+}

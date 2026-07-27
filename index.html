@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="description" content="InvestidorBR — Assessor Virtual de Investimentos com IA. Simule, monitore e automatize sua carteira. Dados em tempo real, alertas e análise por Gemini AI."/>
+  <meta name="theme-color" content="#060B14"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="InvestidorBR"/>
+  <meta property="og:title" content="InvestidorBR 💎 Assessor Virtual de Investimentos"/>
+  <meta property="og:description" content="A plataforma mais completa de investimentos do Brasil. Dados reais, IA, automação e alertas."/>
+  <meta property="og:type" content="website"/>
+  <title>InvestidorBR 💎 — Assessor Virtual Premium</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ===== TICKER BAR ===== -->
+  <div class="ticker-bar" id="ticker-bar">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-loading">⏳ Carregando mercado...</span>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="main-header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="15" stroke="url(#ggrad)" stroke-width="2"/>
+            <path d="M8 20L13 14L17 18L22 11" stroke="url(#ggrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="ggrad" x1="0" y1="0" x2="32" y2="32">
+                <stop offset="0%" stop-color="#00D09C"/>
+                <stop offset="100%" stop-color="#F0A500"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-main">InvestidorBR</span>
+          <span class="logo-sub">Assessor Virtual IA</span>
+        </div>
+      </div>
+
+      <nav class="nav" id="main-nav">
+        <a href="#inicio"     class="nav-link active" id="nav-inicio">Início</a>
+        <a href="#mercado"    class="nav-link" id="nav-mercado">Mercado</a>
+        <a href="#simulador"  class="nav-link" id="nav-simulador">Simulador</a>
+        <a href="#carteira"   class="nav-link" id="nav-carteira">Carteira</a>
+        <a href="#ferramentas" class="nav-link" id="nav-ferramentas">Ferramentas</a>
+        <a href="#automacao"  class="nav-link" id="nav-automacao">🤖 IA</a>
+        <a href="#alertas"    class="nav-link" id="nav-alertas">🔔 Alertas</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="market-status" id="market-status">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-txt">Conectando...</span>
+        </div>
+        <button class="btn-primary" id="btn-install-pwa" style="display:none" onclick="installPWA()">
+          📲 Instalar App
+        </button>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="#inicio"      class="mobile-nav-link" onclick="closeMobileMenu()">🏠 Início</a>
+      <a href="#mercado"     class="mobile-nav-link" onclick="closeMobileMenu()">📡 Mercado</a>
+      <a href="#simulador"   class="mobile-nav-link" onclick="closeMobileMenu()">📊 Simulador</a>
+      <a href="#carteira"    class="mobile-nav-link" onclick="closeMobileMenu()">💼 Carteira</a>
+      <a href="#ferramentas" class="mobile-nav-link" onclick="closeMobileMenu()">🛠 Ferramentas</a>
+      <a href="#automacao"   class="mobile-nav-link" onclick="closeMobileMenu()">🤖 IA & Automação</a>
+      <a href="#alertas"     class="mobile-nav-link" onclick="closeMobileMenu()">🔔 Alertas</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="inicio">
+    <div class="hero-bg">
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="hero-orb orb-3"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Plataforma em tempo real — dados ao vivo
+      </div>
+      <h1 class="hero-title">
+        Invista com a <span class="text-gradient">inteligência</span><br/>
+        de um assessor premium
+      </h1>
+      <p class="hero-sub">
+        Mercado ao vivo · Simulações avançadas · Carteira inteligente · Automação com IA ·
+        Alertas em tempo real. Tudo gratuito, tudo no seu bolso.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary btn-lg" id="btn-hero-simular" onclick="scrollToSection('simulador')">
+          Simular Agora 🚀
+        </button>
+        <button class="btn-glass btn-lg" id="btn-hero-automacao" onclick="scrollToSection('automacao')">
+          🤖 Automação IA
+        </button>
+      </div>
+      <div class="hero-kpis" id="hero-kpis">
+        <div class="kpi-item">
+          <span class="kpi-val" id="kpi-selic">—</span>
+          <span class="kpi-lbl">Selic a.a.</span>
+        </div>
+        <div class="kpi-divider"></div>
+        <div class="kpi-item">
+          <span class="kpi-val" id="kpi-cdi">—</span>
+          <span class="kpi-lbl">CDI</span>
+        </div>
+        <div class="kpi-divider"></div>
+        <div class="kpi-item">
+          <span class="kpi-val" id="kpi-ipca">—</span>
+          <span class="kpi-lbl">IPCA</span>
+        </div>
+        <div class="kpi-divider"></div>
+        <div class="kpi-item">
+          <span class="kpi-val" id="kpi-usd">—</span>
+          <span class="kpi-lbl">USD/BRL</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dashboard-preview">
+        <div class="dp-header">
+          <span class="dp-dot red"></span><span class="dp-dot yellow"></span><span class="dp-dot green"></span>
+          <span class="dp-title">Portfólio Live</span>
+        </div>
+        <div class="dp-chart-area">
+          <canvas id="hero-mini-chart" width="260" height="120"></canvas>
+        </div>
+        <div class="dp-stats">
+          <div class="dp-stat">
+            <span class="dp-stat-val text-green">+12,4%</span>
+            <span class="dp-stat-lbl">Retorno 12m</span>
+          </div>
+          <div class="dp-stat">
+            <span class="dp-stat-val">R$847K</span>
+            <span class="dp-stat-lbl">Patrimônio</span>
+          </div>
+          <div class="dp-stat">
+            <span class="dp-stat-val text-gold">R$8.240</span>
+            <span class="dp-stat-lbl">Renda/mês</span>
+          </div>
+        </div>
+        <div class="dp-alerts">
+          <div class="dp-alert-item">🔔 <span>PETR4 subiu 2,3%</span></div>
+          <div class="dp-alert-item">🤖 <span>IA: Rebalancear FIIs</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MERCADO AO VIVO ===== -->
+  <section class="section" id="mercado">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">📡 Ao Vivo</div>
+        <h2 class="section-title">Radar do <span class="text-gradient">Mercado</span></h2>
+        <p class="section-sub">Principais indicadores atualizados em tempo real.</p>
+        <div class="update-info">
+          <span class="update-dot"></span>
+          <span id="last-update">Atualizando...</span>
+        </div>
+      </div>
+      <div class="mercado-grid" id="mercado-grid">
+        <div class="mercado-skeleton"></div>
+        <div class="mercado-skeleton"></div>
+        <div class="mercado-skeleton"></div>
+        <div class="mercado-skeleton"></div>
+        <div class="mercado-skeleton"></div>
+        <div class="mercado-skeleton"></div>
+        <div class="mercado-skeleton"></div>
+        <div class="mercado-skeleton"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SIMULADOR PREMIUM ===== -->
+  <section class="section section-alt" id="simulador">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">📊 Calculadora</div>
+        <h2 class="section-title">Simulador de <span class="text-gradient">Juros Compostos</span></h2>
+        <p class="section-sub">Projeção com IR, inflação e 3 cenários simultâneos.</p>
+      </div>
+      <div class="sim-container">
+        <div class="sim-form glass-card">
+          <div class="sim-form-title">⚙️ Parâmetros</div>
+          <div class="form-group">
+            <label class="form-label" for="sim-inicial">💰 Investimento Inicial</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input class="form-input" id="sim-inicial" type="number" value="10000" min="0"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sim-mensal">📅 Aporte Mensal</label>
+            <div class="input-wrap">
+              <span class="input-prefix">R$</span>
+              <input class="form-input" id="sim-mensal" type="number" value="500" min="0"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sim-taxa">📈 Rentabilidade Anual</label>
+            <div class="taxa-group">
+              <div class="input-wrap">
+                <input class="form-input" id="sim-taxa" type="number" value="12" step="0.5" min="0" max="100"/>
+                <span class="input-suffix">%</span>
+              </div>
+              <div class="taxa-presets">
+                <button class="preset-btn" id="preset-poup" onclick="setTaxa(7,'preset-poup')">Poup.</button>
+                <button class="preset-btn" id="preset-cdi"  onclick="setTaxa(12.65,'preset-cdi')">CDI</button>
+                <button class="preset-btn" id="preset-ipca" onclick="setTaxa(18.5,'preset-ipca')">IPCA+6</button>
+                <button class="preset-btn" id="preset-ibov" onclick="setTaxa(15,'preset-ibov')">Ibov</button>
+                <button class="preset-btn" id="preset-max"  onclick="setTaxa(30,'preset-max')">⚡ Max</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sim-prazo">⏱️ Prazo — <span id="prazo-label" class="text-green">10 anos</span></label>
+            <input class="form-range" id="sim-prazo" type="range" min="1" max="40" value="10" oninput="updatePrazoLabel(this.value)"/>
+            <div class="range-labels"><span>1a</span><span>40a</span></div>
+          </div>
+
+          <div class="sim-extras">
+            <label class="toggle-row">
+              <span>💸 Descontar IR (tabela regressiva)</span>
+              <div class="toggle-switch">
+                <input type="checkbox" id="toggle-ir" checked/>
+                <span class="toggle-thumb"></span>
+              </div>
+            </label>
+            <label class="toggle-row">
+              <span>📉 Considerar inflação (IPCA ~4,5%)</span>
+              <div class="toggle-switch">
+                <input type="checkbox" id="toggle-inflation"/>
+                <span class="toggle-thumb"></span>
+              </div>
+            </label>
+          </div>
+
+          <button class="btn-primary btn-full" id="btn-calcular" onclick="calcSim()">
+            Calcular Projeção 📊
+          </button>
+        </div>
+
+        <div class="sim-result glass-card" id="sim-result" style="display:none;">
+          <div class="result-header">
+            <h3 class="result-title">📈 Projeção do Patrimônio</h3>
+            <div id="result-badges" class="result-badges"></div>
+          </div>
+          <div class="chart-container">
+            <canvas id="sim-chart"></canvas>
+          </div>
+          <div class="result-nums" id="result-nums"></div>
+          <div class="scenarios-row" id="scenarios-row"></div>
+          <div id="automacao-recomendacao"></div>
+        </div>
+      </div>
+
+      <!-- CALCULADORAS EXTRAS -->
+      <div class="calcs-grid">
+        <div class="calc-card glass-card" id="calc-div">
+          <div class="calc-icon">🏢</div>
+          <div class="calc-title">Calculadora FII</div>
+          <div class="calc-desc">Calcule rendimento mensal por cota</div>
+          <div class="form-group" style="margin-top:16px">
+            <input class="form-input" id="fii-preco" type="number" placeholder="Preço da cota (R$)" value="110"/>
+          </div>
+          <div class="form-group">
+            <input class="form-input" id="fii-dy" type="number" placeholder="DY anual (%)" value="9.5"/>
+          </div>
+          <div class="form-group">
+            <input class="form-input" id="fii-cotas" type="number" placeholder="Qtde de cotas" value="100"/>
+          </div>
+          <button class="btn-outline btn-full" onclick="calcFII()">Calcular</button>
+          <div class="calc-result" id="fii-result"></div>
+        </div>
+
+        <div class="calc-card glass-card" id="calc-dy">
+          <div class="calc-icon">💰</div>
+          <div class="calc-title">Dividend Yield</div>
+          <div class="calc-desc">Calcule o DY de qualquer ativo</div>
+          <div class="form-group" style="margin-top:16px">
+            <input class="form-input" id="dy-div" type="number" placeholder="Dividendo anual (R$)" value="5.20"/>
+          </div>
+          <div class="form-group">
+            <input class="form-input" id="dy-preco" type="number" placeholder="Preço do ativo (R$)" value="42"/>
+          </div>
+          <button class="btn-outline btn-full" onclick="calcDY()">Calcular</button>
+          <div class="calc-result" id="dy-result"></div>
+        </div>
+
+        <div class="calc-card glass-card" id="calc-ir">
+          <div class="calc-icon">🧾</div>
+          <div class="calc-title">IR sobre Ganhos</div>
+          <div class="calc-desc">Calcule o imposto na venda de ações</div>
+          <div class="form-group" style="margin-top:16px">
+            <input class="form-input" id="ir-compra" type="number" placeholder="Valor de compra (R$)" value="10000"/>
+          </div>
+          <div class="form-group">
+            <input class="form-input" id="ir-venda" type="number" placeholder="Valor de venda (R$)" value="15000"/>
+          </div>
+          <div class="form-group">
+            <select class="form-input" id="ir-tipo">
+              <option value="acoes">Ações (15% / 20% > 20k)</option>
+              <option value="fii">FIIs (20%)</option>
+              <option value="rf">Renda Fixa (tabela)</option>
+            </select>
+          </div>
+          <button class="btn-outline btn-full" onclick="calcIR()">Calcular</button>
+          <div class="calc-result" id="ir-result"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CARTEIRA ===== -->
+  <section class="section" id="carteira">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">💼 Perfil</div>
+        <h2 class="section-title">Monte sua <span class="text-gradient">Carteira Ideal</span></h2>
+        <p class="section-sub">Distribuição ideal de ativos por perfil de investidor.</p>
+      </div>
+      <div class="carteira-container">
+        <div class="perfil-cards">
+          <div class="perfil-card active" id="perfil-conservador" onclick="selectPerfil('conservador')">
+            <div class="perfil-icon">🛡️</div>
+            <div class="perfil-info">
+              <div class="perfil-nome">Conservador</div>
+              <div class="perfil-desc">Segurança e liquidez primeiro</div>
+            </div>
+            <div class="perfil-badge">80% RF</div>
+          </div>
+          <div class="perfil-card" id="perfil-moderado" onclick="selectPerfil('moderado')">
+            <div class="perfil-icon">⚖️</div>
+            <div class="perfil-info">
+              <div class="perfil-nome">Moderado</div>
+              <div class="perfil-desc">Equilíbrio risco/retorno</div>
+            </div>
+            <div class="perfil-badge">50/50</div>
+          </div>
+          <div class="perfil-card" id="perfil-arrojado" onclick="selectPerfil('arrojado')">
+            <div class="perfil-icon">🚀</div>
+            <div class="perfil-info">
+              <div class="perfil-nome">Arrojado</div>
+              <div class="perfil-desc">Máximo crescimento LP</div>
+            </div>
+            <div class="perfil-badge">70% RV</div>
+          </div>
+          <div class="perfil-card" id="perfil-trader" onclick="selectPerfil('trader')">
+            <div class="perfil-icon">⚡</div>
+            <div class="perfil-info">
+              <div class="perfil-nome">Trader</div>
+              <div class="perfil-desc">Operações ativas e Cripto</div>
+            </div>
+            <div class="perfil-badge">Dinâmico</div>
+          </div>
+        </div>
+        <div class="carteira-visual">
+          <div class="chart-donut-wrap">
+            <canvas id="carteira-chart" width="260" height="260"></canvas>
+          </div>
+          <div class="carteira-legend" id="carteira-legend"></div>
+        </div>
+        <div class="carteira-ativos" id="carteira-ativos"></div>
+      </div>
+
+      <!-- DICAS IA -->
+      <div class="dicas-section" id="dicas-section">
+        <div class="dicas-header">
+          <h3 class="dicas-title">💡 Dicas do Assessor IA</h3>
+          <button class="btn-ghost" onclick="nextDica()">Próxima →</button>
+        </div>
+        <div class="dica-card glass-card" id="dica-card">
+          <div class="dica-icon" id="dica-icon">🧠</div>
+          <div class="dica-text" id="dica-text">Carregando dica personalizada...</div>
+          <div class="dica-cat" id="dica-cat">Psicologia do Investidor</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FERRAMENTAS ===== -->
+  <section class="section section-alt" id="ferramentas">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">🛠 Plataformas</div>
+        <h2 class="section-title">Ferramentas & <span class="text-gradient">Plataformas</span></h2>
+        <p class="section-sub">As melhores plataformas do mercado financeiro brasileiro.</p>
+      </div>
+      <div class="tools-tabs" id="tools-tabs">
+        <button class="tool-tab active" id="tab-corretoras"      onclick="showToolTab('corretoras')">🏦 Corretoras</button>
+        <button class="tool-tab" id="tab-robos-c"               onclick="showToolTab('robos-c')">🤖 Robôs Consultores</button>
+        <button class="tool-tab" id="tab-robos-t"               onclick="showToolTab('robos-t')">⚡ Robôs Traders</button>
+        <button class="tool-tab" id="tab-consolidadores"        onclick="showToolTab('consolidadores')">📊 Consolidadores</button>
+        <button class="tool-tab" id="tab-analise"               onclick="showToolTab('analise')">🔍 Análise</button>
+      </div>
+      <div class="tools-grid" id="tools-content"></div>
+    </div>
+  </section>
+
+  <!-- ===== AUTOMAÇÃO IA ===== -->
+  <section class="section" id="automacao">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">🤖 Inteligência Artificial</div>
+        <h2 class="section-title">Automação com <span class="text-gradient">IA Gemini</span></h2>
+        <p class="section-sub">Configure sua chave Gemini para análises personalizadas em tempo real.</p>
+      </div>
+
+      <!-- Painel Gemini -->
+      <div class="bento-grid">
+        <!-- Config Card -->
+        <div class="bento-card bento-lg glass-card" id="gemini-config-card">
+          <div class="bento-card-header">
+            <div class="bento-icon">🔑</div>
+            <div>
+              <div class="bento-title">Configurar Gemini API</div>
+              <div class="bento-sub">Gratuita em aistudio.google.com</div>
+            </div>
+            <div class="api-status" id="api-status-badge">
+              <span class="status-indicator disconnected" id="api-indicator"></span>
+              <span id="api-status-txt">Não conectado</span>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:20px">
+            <label class="form-label">Chave API Gemini</label>
+            <div class="input-wrap">
+              <input class="form-input" id="gemini-key" type="password" placeholder="AIzaSy..."/>
+              <button class="input-btn" onclick="toggleKeyVisibility()" id="btn-eye">👁️</button>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="connectGemini()">⚡ Conectar</button>
+            <button class="btn-ghost" onclick="clearGeminiKey()">Remover Chave</button>
+          </div>
+          <div class="api-info-box">
+            <p>💡 <strong>Como obter gratuitamente:</strong> Acesse <a href="https://aistudio.google.com/app/apikey" target="_blank" class="link">aistudio.google.com</a> → Criar chave API → Cole acima</p>
+            <p style="margin-top:8px">🔒 A chave fica salva <strong>somente no seu dispositivo</strong> (localStorage) — nunca enviada a servidores.</p>
+          </div>
+        </div>
+
+        <!-- Análise de Carteira -->
+        <div class="bento-card glass-card" id="card-analise-ia">
+          <div class="bento-icon">📊</div>
+          <div class="bento-title">Analisar Carteira</div>
+          <div class="bento-sub">IA avalia sua carteira atual e dá recomendações</div>
+          <button class="btn-outline btn-full" style="margin-top:20px" onclick="analisarCarteiraIA()">
+            🧠 Analisar com IA
+          </button>
+          <div class="ia-result" id="analise-result"></div>
+        </div>
+
+        <!-- Chat IA -->
+        <div class="bento-card glass-card" id="card-chat-ia">
+          <div class="bento-icon">💬</div>
+          <div class="bento-title">Chat com Assessor IA</div>
+          <div class="bento-sub">Tire dúvidas sobre investimentos</div>
+          <div class="chat-box" id="chat-box">
+            <div class="chat-msg bot">
+              <span>🤖</span>
+              <span>Olá! Sou seu assessor IA. Conecte a chave Gemini e me faça qualquer pergunta sobre investimentos!</span>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input class="form-input" id="chat-input" placeholder="Ex: Devo investir em FIIs agora?" onkeypress="if(event.key==='Enter')sendChat()"/>
+            <button class="btn-primary" onclick="sendChat()">→</button>
+          </div>
+        </div>
+
+        <!-- Relatório IA -->
+        <div class="bento-card glass-card" id="card-relatorio-ia">
+          <div class="bento-icon">📋</div>
+          <div class="bento-title">Relatório Mensal</div>
+          <div class="bento-sub">IA gera diagnóstico completo da carteira</div>
+          <div class="relatorio-options">
+            <label class="toggle-row">
+              <span>Incluir análise macro</span>
+              <div class="toggle-switch">
+                <input type="checkbox" id="rel-macro" checked/>
+                <span class="toggle-thumb"></span>
+              </div>
+            </label>
+            <label class="toggle-row">
+              <span>Incluir dicas personalizadas</span>
+              <div class="toggle-switch">
+                <input type="checkbox" id="rel-dicas" checked/>
+                <span class="toggle-thumb"></span>
+              </div>
+            </label>
+          </div>
+          <button class="btn-outline btn-full" style="margin-top:16px" onclick="gerarRelatorio()">
+            📄 Gerar Relatório
+          </button>
+          <div class="ia-result" id="relatorio-result"></div>
+        </div>
+
+        <!-- Auto-Rebalanceamento -->
+        <div class="bento-card bento-wide glass-card" id="card-rebalance">
+          <div class="bento-card-header">
+            <div class="bento-icon">⚖️</div>
+            <div>
+              <div class="bento-title">Simulador de Rebalanceamento</div>
+              <div class="bento-sub">IA calcula quanto comprar/vender para atingir alocação ideal</div>
+            </div>
+          </div>
+          <div class="rebalance-inputs" id="rebalance-inputs">
+            <div class="rebalance-row">
+              <span class="rb-label">💰 Patrimônio total</span>
+              <div class="input-wrap" style="width:180px">
+                <span class="input-prefix">R$</span>
+                <input class="form-input" id="rb-patrimonio" type="number" value="50000"/>
+              </div>
+            </div>
+          </div>
+          <button class="btn-outline" style="margin-top:16px" onclick="calcRebalanceamento()">⚖️ Calcular Rebalanceamento</button>
+          <div class="ia-result" id="rebalance-result"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ALERTAS ===== -->
+  <section class="section section-alt" id="alertas">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-badge">🔔 Tempo Real</div>
+        <h2 class="section-title">Sistema de <span class="text-gradient">Alertas</span></h2>
+        <p class="section-sub">Receba notificações do browser quando seus ativos atingirem os preços alvo.</p>
+      </div>
+
+      <div class="alertas-layout">
+        <div class="alerta-form glass-card">
+          <h3 class="form-section-title">+ Criar Novo Alerta</h3>
+
+          <div class="form-group">
+            <label class="form-label">Ativo ou Indicador</label>
+            <select class="form-input" id="alerta-ativo">
+              <option value="USD">USD/BRL (Dólar)</option>
+              <option value="EUR">EUR/BRL (Euro)</option>
+              <option value="BTC">Bitcoin (BTC/BRL)</option>
+              <option value="IBOV">Ibovespa</option>
+              <option value="SELIC">Selic (% a.a.)</option>
+              <option value="OUTRO">Outro ativo (manual)</option>
+            </select>
+          </div>
+          <div class="form-group" id="alerta-manual-grp" style="display:none">
+            <label class="form-label">Nome do ativo</label>
+            <input class="form-input" id="alerta-manual" placeholder="Ex: PETR4"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Condição</label>
+            <div class="input-row">
+              <select class="form-input" id="alerta-cond" style="flex:1">
+                <option value="acima">Sobe acima de</option>
+                <option value="abaixo">Cai abaixo de</option>
+              </select>
+              <div class="input-wrap" style="flex:1">
+                <input class="form-input" id="alerta-valor" type="number" placeholder="Valor" step="0.01"/>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mensagem personalizada (opcional)</label>
+            <input class="form-input" id="alerta-msg" placeholder="Ex: Hora de comprar!"/>
+          </div>
+          <button class="btn-primary btn-full" onclick="criarAlerta()">🔔 Criar Alerta</button>
+          <div class="notif-permission-box" id="notif-box" style="display:none">
+            <p>⚠️ Para receber alertas do browser, clique em <strong>Permitir notificações</strong></p>
+            <button class="btn-outline btn-full" onclick="requestNotifPermission()" style="margin-top:10px">Permitir Notificações</button>
+          </div>
+        </div>
+
+        <div class="alertas-lista glass-card">
+          <div class="alertas-lista-header">
+            <h3 class="form-section-title">🔔 Alertas Ativos</h3>
+            <button class="btn-ghost" onclick="limparAlertas()">Limpar todos</button>
+          </div>
+          <div id="alertas-list">
+            <div class="alertas-empty">
+              <div style="font-size:48px">🔕</div>
+              <p>Nenhum alerta criado ainda.</p>
+              <p style="font-size:13px;opacity:.6">Crie um alerta ao lado para monitorar seus ativos.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">💎 InvestidorBR</div>
+        <p class="footer-desc">Assessor Virtual Premium — Educação financeira com IA para todos os brasileiros.</p>
+        <div class="footer-badges">
+          <div class="store-badge" onclick="installPWA()">
+            <span>📲</span>
+            <div>
+              <div class="store-badge-top">Disponível</div>
+              <div class="store-badge-name">Instalar App</div>
+            </div>
+          </div>
+          <a class="store-badge" href="https://play.google.com" target="_blank">
+            <span>▶️</span>
+            <div>
+              <div class="store-badge-top">Em breve no</div>
+              <div class="store-badge-name">Google Play</div>
+            </div>
+          </a>
+          <a class="store-badge" href="https://apps.apple.com" target="_blank">
+            <span>🍎</span>
+            <div>
+              <div class="store-badge-top">Em breve na</div>
+              <div class="store-badge-name">App Store</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links-col">
+        <div class="footer-links-title">Plataforma</div>
+        <a href="#mercado" class="footer-link">Mercado Ao Vivo</a>
+        <a href="#simulador" class="footer-link">Simulador</a>
+        <a href="#carteira" class="footer-link">Carteira</a>
+        <a href="#automacao" class="footer-link">Automação IA</a>
+        <a href="#alertas" class="footer-link">Alertas</a>
+      </div>
+      <div class="footer-links-col">
+        <div class="footer-links-title">Ferramentas</div>
+        <a href="#ferramentas" class="footer-link">Corretoras</a>
+        <a href="#ferramentas" class="footer-link">Robôs Traders</a>
+        <a href="#ferramentas" class="footer-link">Consolidadores</a>
+        <a href="#ferramentas" class="footer-link">Análise Fundamentalista</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>⚠️ Este app é educacional e não constitui recomendação de investimento. Invista com responsabilidade.</span>
+      <span>© 2026 InvestidorBR</span>
+    </div>
+  </footer>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+    <div class="modal-box glass-card" id="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" id="btn-modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ===== FAB ===== -->
+  <button class="fab" id="fab-scroll" onclick="scrollToTop()" title="Topo">↑</button>
+
+  <script src="app.js"></script>
+</body>
+</html>
